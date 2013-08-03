@@ -15,17 +15,36 @@
 # limitations under the License.
 #
 import webapp2
+import string
+import cgi
 
 
-form = """<form method="post" action="/testform">
-        <input name='q'>
+def clean_input(input):
+    result = ''
+    for char in input:
+        if char in string.ascii_lowercase:
+            result += string.ascii_lowercase[(string.ascii_lowercase.find(char) + 13) % len(string.ascii_lowercase)]
+        elif char in string.ascii_uppercase:
+            result += string.ascii_uppercase[(string.ascii_uppercase.find(char) + 13) % len(string.ascii_uppercase)]
+        else:
+            result += char
+
+    return cgi.escape(result, quote=True)
+
+form = """<form method="post" action="/unit2/rot13">
+        <textarea name='text'>%(user_input)s</textarea>
+        <br>
         <input type="submit">
     </form>"""
 
 
+def write_form(self, user_input=''):
+    self.response.write(form % {'user_input': user_input})
+
+
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write(form)
+        write_form(self)
 
 
 class TestHandler(webapp2.RequestHandler):
@@ -37,7 +56,17 @@ class TestHandler(webapp2.RequestHandler):
         # self.response.write(self.request)
 
 
+class Rot13Handler(webapp2.RedirectHandler):
+    def get(self):
+        write_form(self)
+
+    def post(self):
+        user_input = self.request.get('text')
+        user_input = clean_input(user_input)
+        self.response.write(form % {'user_input': user_input})
+
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
-    ('/testform', TestHandler)
+    ('/unit2/rot13', Rot13Handler)
 ], debug=True)
