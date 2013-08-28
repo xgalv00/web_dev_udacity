@@ -15,10 +15,17 @@
 # limitations under the License.
 #
 from collections import defaultdict
-import webapp2
+import os
 import string
 import cgi
 import re
+
+import webapp2
+import jinja2
+
+
+from app.models import Blog
+
 
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
 PASS_RE = re.compile(r"^.{3,20}$")
@@ -200,12 +207,50 @@ class WelcomeHandler(webapp2.RequestHandler):
         username = self.request.get('username')
         self.response.write("<h1>Welcome, {}!</h1>".format(username))
 
+template_dir = os.path.join(os.path.dirname(__file__), 'templates')
+jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=True)
+
+
+class Handler(webapp2.RequestHandler):
+    def write(self, *a, **kw):
+        self.response.out.write(*a, **kw)
+
+    def render_str(self, template, **params):
+        t = jinja_env.get_template(template)
+        return t.render(params)
+
+    def render(self, template, **kw):
+        self.write(self.render_str(template, **kw))
+
+
+class FrontBlogHandler(Handler):
+    def get(self):
+        blogs = Blog.all()
+        blogs.order('-created')
+        self.render('blog.html', blogs=blogs)
+
+
+class NewPostHandler(Handler):
+    def get(self):
+        pass
+
+    def post(self):
+        pass
+
+
+class PostHandler(Handler):
+    def get(self, post_id):
+        pass
+
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler),
-    ('/unit2/rot13', Rot13Handler),
-    ('/unit2/signup', SignupHandler),
-    ('/unit2/welcome', WelcomeHandler)
+    (r'/', MainHandler),
+    (r'/unit2/rot13', Rot13Handler),
+    (r'/unit2/signup', SignupHandler),
+    (r'/unit2/welcome', WelcomeHandler),
+    (r'/unit3/blog', FrontBlogHandler),
+    (r'/unit3/blog/newpost', NewPostHandler),
+    (r'/unit3/blog/(\d+)', PostHandler)
 ], debug=True)
 
 
