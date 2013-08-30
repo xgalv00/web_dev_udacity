@@ -232,10 +232,24 @@ class FrontBlogHandler(Handler):
 
 class NewPostHandler(Handler):
     def get(self):
-        pass
+        self.render('newpost.html')
 
     def post(self):
-        pass
+        subject = self.request.get('subject')
+        body = self.request.get('body')
+        subject = cgi.escape(subject, quote=True)
+        body = cgi.escape(body, quote=True)
+
+        if subject and body:
+            e = Blog(title=subject, blog_entry=body)
+            e.put()
+            self.redirect('/unit3/blog/{}'.format(e.key().id()))
+        else:
+            context = {'subject': subject,
+                       'body': body,
+                       'error': 'some error text'}
+
+            self.render('newpost.html', **context)
 
 
 class PostHandler(Handler):
