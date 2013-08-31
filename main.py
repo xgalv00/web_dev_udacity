@@ -227,7 +227,7 @@ class FrontBlogHandler(Handler):
     def get(self):
         blogs = Blog.all()
         blogs.order('-created')
-        self.render('blog.html', blogs=blogs)
+        self.render('blog.html', blogs=blogs, title='Blog')
 
 
 class NewPostHandler(Handler):
@@ -254,7 +254,9 @@ class NewPostHandler(Handler):
 
 class PostHandler(Handler):
     def get(self, post_id):
-        pass
+        blogs = []
+        blogs.append(Blog.get_by_id(int(post_id)))
+        self.render('blog.html', blogs=blogs, title='Permalink')
 
 
 app = webapp2.WSGIApplication([
