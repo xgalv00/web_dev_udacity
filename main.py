@@ -236,17 +236,17 @@ class NewPostHandler(Handler):
 
     def post(self):
         subject = self.request.get('subject')
-        body = self.request.get('body')
+        content = self.request.get('content')
         subject = cgi.escape(subject, quote=True)
-        body = cgi.escape(body, quote=True)
+        content = cgi.escape(content, quote=True)
 
-        if subject and body:
-            e = Blog(title=subject, blog_entry=body)
+        if subject and content:
+            e = Blog(title=subject, blog_entry=content)
             e.put()
             self.redirect('/unit3/blog/{}'.format(e.key().id()))
         else:
             context = {'subject': subject,
-                       'body': body,
+                       'content': content,
                        'error': 'some error text'}
 
             self.render('newpost.html', **context)
