@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="post" action="/unit4/login">
+        <table>
+            <tr>
+                <td class="label">
+                    Username
+                </td>
+                <td>
+                    <input type="text" name="username" value="{{ username }}">
+                </td>
+                <td class="error">
+                    {{ username_error }}
+                </td>
+            </tr>
+
+            <tr>
+                <td class="label">
+                    Password
+                </td>
+                <td>
+                    <input type="password" name="password" value="{{ password }}">
+                </td>
+                <td class="error">
+                    {{ password_error }}
+                </td>
+            </tr>
+        </table>
+        <div class="error">{{ general_error }}</div>
+        <input type="submit">
+    </form>
+</body>
+</html>

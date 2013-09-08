@@ -179,12 +179,17 @@ def username_exists(username):
     q.filter("login =", username)
 
     if q.count() == 1:
-        user_entry = q.run()
-        return user_entry
+        for result in q.run():
+            user_entry = result
+            return user_entry
 
 
 def check_password(user_entry, password):
-    pass
+    user_entry_pw = user_entry.password
+    name = user_entry.login
+    salt = user_entry_pw.split(',')[1]
+    if make_pw_hash(name, password, salt) == user_entry.password:
+        return True
 
 
 class LoginHandler(Handler):
