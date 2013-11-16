@@ -250,6 +250,7 @@ app = webapp2.WSGIApplication([
     (r'/unit2/rot13', Rot13Handler),
     (r'/unit2/signup', SignupHandler),
     (r'/unit2/welcome', WelcomeHandler),
+    (r'/unit5/blog', FrontBlogHandler),
     (r'/unit3/blog', FrontBlogHandler),
     (r'/unit3/blog/newpost', NewPostHandler),
     (r'/unit5/blog/newpost', unit5.NewPostHandler),
@@ -259,7 +260,7 @@ app = webapp2.WSGIApplication([
     (r'/unit4/login', unit4.LoginHandler),
     (r'/unit4/logout', unit4.LogoutHandler),
     (r'/unit4/welcome', unit4.WelcomeHandler),
-    (r'/unit5/blog.json', unit5.FrontBlogAPIHandler),
+    (r'/unit5/blog/[.]json', unit5.FrontBlogAPIHandler),
     (r'/unit5/blog/(\d+)[.]json', unit5.PostAPIHandler),
 ], debug=True)
 

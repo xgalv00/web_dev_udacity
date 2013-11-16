@@ -45,8 +45,8 @@ class FrontBlogAPIHandler(Handler):
     def get(self):
         blogs = Blog.all()
         blogs.order('-created')
-        json_out = json.dumps(blogs)
-        self.response.headers.add_header("Content-Type", "application/json; charset=UTF-8")
+        json_out = json.dumps([to_dict(x) for x in blogs])
+        self.response.headers["Content-Type"] = "application/json; charset=UTF-8"
         self.response.write(json_out)
         # self.render('blog.html', blogs=blogs, title='Blog')
 
@@ -54,9 +54,8 @@ class FrontBlogAPIHandler(Handler):
 class PostAPIHandler(Handler):
     def get(self, post_id):
         json_out = json.dumps(to_dict(Blog.get_by_id(int(post_id))))
-        self.response.headers.add_header("Content-Type", "application/json; charset=UTF-8")
+        self.response.headers["Content-Type"] = "application/json; charset=UTF-8"
         self.response.write(json_out)
-        #self.render('blog.html', blogs=[Blog.get_by_id(int(post_id))], title='Permalink')
 
 
 class NewPostHandler(Handler):
