@@ -23,8 +23,9 @@ import webapp2
 
 
 from app.models import Blog
-from app import unit4
 from app.helper import Handler
+from app import unit4
+from app import unit5
 
 
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
@@ -249,13 +250,18 @@ app = webapp2.WSGIApplication([
     (r'/unit2/rot13', Rot13Handler),
     (r'/unit2/signup', SignupHandler),
     (r'/unit2/welcome', WelcomeHandler),
+    (r'/unit5/blog', FrontBlogHandler),
     (r'/unit3/blog', FrontBlogHandler),
     (r'/unit3/blog/newpost', NewPostHandler),
+    (r'/unit5/blog/newpost', unit5.NewPostHandler),
     (r'/unit3/blog/(\d+)', PostHandler),
+    (r'/unit5/blog/(\d+)', PostHandler),
     (r'/unit4/signup', unit4.SignupHandler),
     (r'/unit4/login', unit4.LoginHandler),
     (r'/unit4/logout', unit4.LogoutHandler),
     (r'/unit4/welcome', unit4.WelcomeHandler),
+    (r'/unit5/blog/[.]json', unit5.FrontBlogAPIHandler),
+    (r'/unit5/blog/(\d+)[.]json', unit5.PostAPIHandler),
 ], debug=True)
 
 
