@@ -1,8 +1,6 @@
 __author__ = 'xgalv00'
 
-import string
 import cgi
-import re
 import json
 import datetime
 import time
@@ -28,9 +26,9 @@ def to_dict(model):
             output[key] = value
         elif isinstance(value, datetime.date):
             # Convert date/datetime to MILLISECONDS-since-epoch (JS "new Date()").
-            ms = time.mktime(value.utctimetuple()) * 1000
-            ms += getattr(value, 'microseconds', 0) / 1000
-            output[key] = int(ms)
+            #ms = time.mktime(value.utctimetuple()) * 1000
+            #ms += getattr(value, 'microseconds', 0) / 1000
+            output[key] = time.strftime("%b %d %Y %H:%M:%S", value.utctimetuple())
         elif isinstance(value, db.GeoPt):
             output[key] = {'lat': value.lat, 'lon': value.lon}
         elif isinstance(value, db.Model):
